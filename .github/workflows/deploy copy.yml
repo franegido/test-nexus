@@ -1,0 +1,27 @@
+name: Deployment
+on:
+  pull_request:
+    branches:
+      - development
+    types: [closed]
+jobs:
+  get_diff:
+    if: ${{ github.event.pull_request.merged }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+
+  publish_nexus:
+    needs:  get_diff
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+
+  merge_main:
+    needs: publish_nexus
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
