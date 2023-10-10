@@ -14,6 +14,12 @@ jobs:
           git fetch origin main
           CHANGED_FILES=$(git diff --name-only origin/main)
           echo "Changed files: $CHANGED_FILES"
+      - name: Create new branch
+        run: |
+          git checkout -b new-branch
+          echo "$CHANGED_FILES" | xargs -I {} git checkout development -- {}
+          git commit -m "Committing changed files from main to development"
+          git push origin new-branch
       - name: Debug Info
         run: |
           echo "Changed files: $CHANGED_FILES"
