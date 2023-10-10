@@ -15,24 +15,3 @@ jobs:
           CHANGED_FILES=$(git diff --name-only origin/main...HEAD)
           echo "Changed files: $CHANGED_FILES"
         id: find-changed-files
-      - name: Create new branch
-        run: |
-          git checkout -b new-branch
-          echo "$CHANGED_FILES" | xargs -I {} git checkout development -- {}
-          git commit -m "Committing changed files from main to development"
-          git push origin new-branch
-        if: steps.find-changed-files.outputs.CHANGED_FILES != ''
-
-  publish_nexus:
-    needs:  get_diff
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get code
-        uses: actions/checkout@v3
-
-  merge_main:
-    needs: publish_nexus
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get code
-        uses: actions/checkout@v3
