@@ -22,8 +22,10 @@ jobs:
             echo "$CHANGED_FILES" | xargs -I {} git checkout development -- {}
             git commit -m "Committing changed files from main to development"
             git push origin new-branch
+          else
+            echo "No changed files. Skipping branch creation."
           fi
-        if: steps.find-changed-files.outputs.CHANGED_FILES != ''
+        if: steps.find-changed-files.outputs.CHANGED_FILES != ''      
       - name: Debug Info
         run: |
           echo "Changed files: $CHANGED_FILES"
