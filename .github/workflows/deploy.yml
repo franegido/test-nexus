@@ -24,4 +24,9 @@ jobs:
             git push origin new-branch
           fi
         if: steps.find-changed-files.outputs.CHANGED_FILES != ''
-         
+      - name: Debug Info
+        run: |
+          echo "Changed files: $CHANGED_FILES"
+          echo "Branch Name: $GITHUB_REF"
+        if: steps.find-changed-files.outputs.CHANGED_FILES != ''
+      
