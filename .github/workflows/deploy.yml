@@ -14,18 +14,7 @@ jobs:
           git fetch origin main
           CHANGED_FILES=$(git diff --name-only origin/main)
           echo "Changed files: $CHANGED_FILES"
-        id: find-changed-files
-      - name: Create new branch
-        run: |
-          if [ -n "$CHANGED_FILES" ]; then
-            git checkout -b new-branch
-            echo "$CHANGED_FILES" | xargs -I {} git checkout development -- {}
-            git commit -m "Committing changed files from main to development"
-            git push origin new-branch
-          else
-            echo "No changed files. Skipping branch creation."
-          fi
-        if: steps.find-changed-files.outputs.CHANGED_FILES != ''      
+        id: find-changed-files 
       - name: Debug Info
         run: |
           echo "Changed files: $CHANGED_FILES"
