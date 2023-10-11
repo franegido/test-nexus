@@ -9,19 +9,15 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
+      - name: list-files
+        run: |
+          ls
       - name: Find changed files
         run: |
           git fetch origin main
           CHANGED_FILES=$(git diff --name-only origin/main)
           echo "Changed files: $CHANGED_FILES"
-      - name: Create new branch
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git checkout -b new-branch
-          echo "$CHANGED_FILES" | xargs -I {} git checkout development -- {}
-          git commit -m "Committing changed files from main to development"
-          git push origin new-branch
+
       - name: Debug Info
         run: |
           echo "Changed files: $CHANGED_FILES"
