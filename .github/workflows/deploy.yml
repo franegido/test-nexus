@@ -10,14 +10,14 @@ jobs:
       - name: Get code
         uses: actions/checkout@v3
       - name: list-files
-        run: |
-          ls
+        run: ls
       - name: Find changed files
         run: |
           git fetch origin main
           CHANGED_FILES=$(git diff --name-only origin/main)
           echo "Changed files: $CHANGED_FILES"
-
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Debug Info
         run: |
           echo "Changed files: $CHANGED_FILES"
