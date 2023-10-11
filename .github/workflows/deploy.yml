@@ -25,7 +25,7 @@ jobs:
           git checkout -b new-branch
           git branch
           ls
-          git branch add .
+          git add .
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Debug Info
