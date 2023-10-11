@@ -23,8 +23,7 @@ jobs:
           git config user.name "franegido"
           git config user.email "fegido@gmail.com"
           git checkout -b new-branch
-          git add .
-          git commit -m"commit from github action"
+          git branch
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Debug Info
