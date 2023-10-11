@@ -21,8 +21,8 @@ jobs:
       - name: Create new branch
         run: |
           git checkout -b new-branch
-          echo "$CHANGED_FILES" | xargs -I {} git checkout development -- {}
-
+          git add .
+          git commit -m"commit from github action"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Debug Info
