@@ -16,15 +16,15 @@ jobs:
           git fetch origin main
           CHANGED_FILES=$(git diff --name-only origin/main)
           echo "Changed files: $CHANGED_FILES"
-          mkdir upload
-          UPLOAD_FOLDER="upload"
+          mkdir package
+          UPLOAD_FOLDER="package"
           while IFS= read -r file; do
             dir=$(dirname "$file")
             mkdir -p "$UPLOAD_FOLDER/$dir"
             cp "$file" "$UPLOAD_FOLDER/$dir/"
             echo "Copied $file to $UPLOAD_FOLDER/$dir/"
           done <<< "$CHANGED_FILES"
-          cd upload
+          cd package
           ls
       - name: Create new branch
         run: |
@@ -32,6 +32,7 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git checkout --orphan nexus
           git rm -rf .
+          echo ".github/" > .gitignore
           git add .
           git commit -m"GitHub action commit"
           git push origin nexus
