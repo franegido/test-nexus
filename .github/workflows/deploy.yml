@@ -18,8 +18,8 @@ jobs:
           echo "Changed files: $CHANGED_FILES"
       - name: Create new branch
         run: |
-          git config user.name "franegido"
-          git config user.email "fegido@gmail.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b new-branch
           git branch
           ls
