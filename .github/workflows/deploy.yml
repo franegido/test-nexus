@@ -16,6 +16,12 @@ jobs:
           git fetch origin main
           CHANGED_FILES=$(git diff --name-only origin/main)
           echo "Changed files: $CHANGED_FILES"
+          mkdir upload
+          UPLOAD_FOLDER="upload"
+          while IFS= read -r file; do
+            cp "$file" "$UPLOAD_FOLDER/"
+            echo "Copied $file to $UPLOAD_FOLDER/"
+          done <<< "$CHANGED_FILES"
       - name: Create new branch
         run: |
           git config user.name 'github-actions[bot]'
