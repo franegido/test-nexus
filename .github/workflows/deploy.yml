@@ -22,6 +22,8 @@ jobs:
             cp "$file" "$UPLOAD_FOLDER/"
             echo "Copied $file to $UPLOAD_FOLDER/"
           done <<< "$CHANGED_FILES"
+          cd upload
+          ls
       - name: Create new branch
         run: |
           git config user.name 'github-actions[bot]'
