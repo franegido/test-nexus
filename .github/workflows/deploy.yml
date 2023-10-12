@@ -19,11 +19,8 @@ jobs:
           mkdir upload
           UPLOAD_FOLDER="upload"
           while IFS= read -r file; do
-            # Get the directory name and create the corresponding directory structure in the upload folder
             dir=$(dirname "$file")
             mkdir -p "$UPLOAD_FOLDER/$dir"
-          
-            # Copy the file to the upload folder while preserving the directory structure
             cp "$file" "$UPLOAD_FOLDER/$dir/"
             echo "Copied $file to $UPLOAD_FOLDER/$dir/"
           done <<< "$CHANGED_FILES"
