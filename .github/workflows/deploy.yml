@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
+      - name: Get context
+        run:  echo running on branch ${GITHUB_REF##*/}
       - name: list-files
         run: ls
       - name: Find changed files
