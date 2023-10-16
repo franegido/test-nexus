@@ -13,9 +13,15 @@ jobs:
         run:  echo running on branch ${GITHUB_REF##*/}
       - name: Extract Sprint Branch name
         run: |
-          BRANCH_REF=${{ github.ref }}
-          SPRINT_BRANCH=$(echo $BRANCH_REF | sed 's/^refs\/heads\///')
-          echo "Sprint branch name: $SPRINT_BRANCH"
+          # Get the commit hash of the latest merge commit on development
+          MERGE_COMMIT_HASH=$(git log -n 1 --merges --pretty=format:'%H' development)
+          
+          # Get the names of branches that were merged into development
+          FEATURE_BRANCHES=$(git branch --contains $MERGE_COMMIT_HASH | grep -v 'development' | sed 's/\* //')
+          
+          # Extract only the first branch name (assuming one feature branch was merged)
+          FEATURE_BRANCH=$(echo $FEATURE_BRANCHES | awk '{print $1}')
+          echo "Feature branch name: $FEATURE_BRANCH"
       - name: list-files
         run: ls
       - name: Find changed files
