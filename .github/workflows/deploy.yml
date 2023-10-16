@@ -15,7 +15,7 @@ jobs:
         run: |
           BRANCH_REF=${{ github.ref }}
           SPRINT_BRANCH=$(echo $BRANCH_REF | sed 's/^refs\/heads\///')
-          echo "sPRINT branch name: $SPRINT_BRANCH"
+          echo "Sprint branch name: $SPRINT_BRANCH"
       - name: list-files
         run: ls
       - name: Find changed files
