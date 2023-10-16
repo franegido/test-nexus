@@ -9,30 +9,44 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
+      - name: Get context
+        run:  echo running on branch ${GITHUB_REF##*/}
+      - name: Extract Sprint Branch name
+        run: |
+          BRANCH_REF=${{ github.ref }}
+          SPRINT_BRANCH=$(echo $BRANCH_REF | sed 's/^refs\/heads\///')
+          echo "Sprint branch name: $SPRINT_BRANCH"
+      - name: list-files
+        run: ls
       - name: Find changed files
         run: |
           git fetch origin main
-          CHANGED_FILES=$(git diff --name-only origin/main...HEAD)
+          CHANGED_FILES=$(git diff --name-only origin/main)
           echo "Changed files: $CHANGED_FILES"
-        id: find-changed-files
+          mkdir package
+          UPLOAD_FOLDER="package"
+          while IFS= read -r file; do
+            dir=$(dirname "$file")
+            mkdir -p "$UPLOAD_FOLDER/$dir"
+            cp "$file" "$UPLOAD_FOLDER/$dir/"
+            echo "Copied $file to $UPLOAD_FOLDER/$dir/"
+          done <<< "$CHANGED_FILES"
+          cd package
+          ls
       - name: Create new branch
         run: |
-          git checkout -b new-branch
-          echo "$CHANGED_FILES" | xargs -I {} git checkout development -- {}
-          git commit -m "Committing changed files from main to development"
-          git push origin new-branch
-        if: steps.find-changed-files.outputs.CHANGED_FILES != ''
-
-  publish_nexus:
-    needs:  get_diff
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get code
-        uses: actions/checkout@v3
-
-  merge_main:
-    needs: publish_nexus
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get code
-        uses: actions/checkout@v3
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git checkout --orphan nexus
+          git rm -rf .
+          echo ".github/
+          .gitignore" > .gitignore
+          git add .
+          git commit -m"GitHub action commit"
+          git push origin nexus
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Debug Info
+        run: |
+          echo "Changed files: $CHANGED_FILES"
+          echo "Branch Name: $GITHUB_REF"
